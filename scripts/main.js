@@ -36,7 +36,6 @@ function addThumbClickHandler(thumb, idx) {
     event.preventDefault();
     setDetailsFromThumb(thumb);
     curIdx = idx;
-    console.log(curIdx);
   });
 }
 
@@ -66,20 +65,16 @@ function getPrevIdx() {
 
 function addBtnClickHandler(button) {
   'use strict';
-  button.addEventListener('click', function (event) {
+  button.addEventListener('click', function () {
     if(button.innerText === '<') {
       var thumbnails = getThumbnailsArray();
       setDetailsFromThumb(thumbnails[getPrevIdx()]);
-      // curIdx--;
-      console.log('current index:' + curIdx);
     }
     else if(button.innerText === '>') {
-      var thumbnails = getThumbnailsArray();
-      setDetailsFromThumb(thumbnails[getNextIdx()]);
-      // curIdx++;
-      console.log('current index:' + curIdx);
+      var thmbnails = getThumbnailsArray();
+      setDetailsFromThumb(thmbnails[getNextIdx()]);
     }
-  })
+  });
 }
 
 function initializeEvents() {
