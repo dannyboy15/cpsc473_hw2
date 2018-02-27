@@ -1,6 +1,10 @@
 var DETAIL_IMAGE_SELECTOR = '[data-image-role="target"]';
 var DETAIL_TITLE_SELECTOR = '[data-image-role="title"]';
 var THUMBNAIL_LINK_SELECTOR = '[data-image-role="trigger"]';
+var DETAIL_BUTTON_SELECTOR = '[data-image-role="triggerBtn"]';
+
+var curIdx = 0;
+var maxIdx = 0;
 
 function setDetails(imageUrl, titleText) {
   'use strict';
@@ -26,11 +30,13 @@ function setDetailsFromThumb(thumbnail) {
   setDetails(imageFromThumb(thumbnail), titleFromThumb(thumbnail));
 }
 
-function addThumbClickHandler(thumb) {
+function addThumbClickHandler(thumb, idx) {
   'use strict';
   thumb.addEventListener('click', function (event) {
     event.preventDefault();
     setDetailsFromThumb(thumb);
+    curIdx = idx;
+    console.log(curIdx);
   });
 }
 
@@ -41,10 +47,51 @@ function getThumbnailsArray() {
   return thumbnailArray;
 }
 
+function getButtonsArray() {
+  'use strict';
+  var buttons = document.querySelectorAll(DETAIL_BUTTON_SELECTOR);
+  var buttonsArray = [].slice.call(buttons);
+  return buttonsArray;
+}
+
+function getNextIdx() {
+  curIdx = curIdx >= (maxIdx - 1) ? 0 : (curIdx + 1);
+  return curIdx;
+}
+
+function getPrevIdx() {
+  curIdx = curIdx <= 0 ? (maxIdx - 1) : (curIdx - 1);
+  return curIdx;
+}
+
+function addBtnClickHandler(button) {
+  'use strict';
+  button.addEventListener('click', function (event) {
+    if(button.innerText === '<') {
+      var thumbnails = getThumbnailsArray();
+      setDetailsFromThumb(thumbnails[getPrevIdx()]);
+      // curIdx--;
+      console.log('current index:' + curIdx);
+    }
+    else if(button.innerText === '>') {
+      var thumbnails = getThumbnailsArray();
+      setDetailsFromThumb(thumbnails[getNextIdx()]);
+      // curIdx++;
+      console.log('current index:' + curIdx);
+    }
+  })
+}
+
 function initializeEvents() {
   'use strict';
   var thumbnails = getThumbnailsArray();
+  maxIdx = thumbnails.length;
   thumbnails.forEach(addThumbClickHandler);
+
+  var buttons = getButtonsArray();
+  buttons.forEach(addBtnClickHandler);
+
+
 }
 
 initializeEvents();
